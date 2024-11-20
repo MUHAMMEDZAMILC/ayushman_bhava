@@ -8,6 +8,7 @@ import 'package:ayushman_bhava/utils/helper/help_toast.dart';
 import '../../../model/branchlistmodel.dart';
 import '../../../model/logindatamodel.dart';
 import '../../../model/patientlistmodel.dart';
+import '../../../model/patientpost_model.dart';
 import '../../../model/treatmentlistmodel.dart';
 import '../../api/urls.dart';
 import 'package:http/http.dart' as http;
@@ -110,6 +111,33 @@ class ProviderApiService {
     } catch (e) {
       snackBar(context, message: 'Login Failed');
       return empty;
+    }
+  }
+
+  // register patient api service
+  patientcreation(context,PatientPost body) async{
+     var url = '$baseUrl$patientUpdateUrl';
+    log(url);
+    dynamic bodyenc = jsonEncode(body.toJson());
+    log(bodyenc);
+     final Uri uri = Uri.parse(url);
+
+    var response = await http.post(uri, headers:  {
+      'Authorization': 'Bearer $logintoken',
+      'Content-Type': 'application/json', 'Accept': '*/*'
+    },body: bodyenc);
+    log(response.body);
+    if (response.statusCode == 200) {
+      try {
+        log("me s s a g e");
+        return jsonDecode(response.body);
+      } catch (e) {
+        log("error === $e");
+        
+      }
+    } else {
+      snackBar(context, message: "invalid");
+      return {"Result":false,"ID":0};
     }
   }
 }

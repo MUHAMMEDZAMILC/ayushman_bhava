@@ -24,7 +24,6 @@ class PatientPost {
     String? id;
     List<int>? male=[];
     List<int>? female=[];
-    
     Branch? branch;
     List<int>? treatments=[];
 

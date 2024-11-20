@@ -1,5 +1,6 @@
 import 'package:ayushman_bhava/controller/service/provider/providerservice.dart';
 import 'package:ayushman_bhava/model/logindatamodel.dart';
+import 'package:ayushman_bhava/model/patientpost_model.dart';
 import 'package:ayushman_bhava/utils/colors.dart';
 import 'package:ayushman_bhava/utils/globalvariable.dart';
 import 'package:ayushman_bhava/utils/helper/pagenavigator.dart';
@@ -51,10 +52,11 @@ class ProviderOperation extends ChangeNotifier {
     } catch (e) {
       ispageloading = false;
     }
-    
+
     ispageloading = false;
     notifyListeners();
   }
+
   //  get branch list method
   List<Branch> branchlist = [];
   getbranchlist(context) async {
@@ -64,12 +66,13 @@ class ProviderOperation extends ChangeNotifier {
     } catch (e) {
       ispageloading = false;
     }
-    
+
     ispageloading = false;
     notifyListeners();
   }
+
   //  get patients list method
-  List<Treatment> treatmentlist= [];
+  List<Treatment> treatmentlist = [];
   gettreatmentlist(context) async {
     ispageloading = true;
     try {
@@ -77,69 +80,76 @@ class ProviderOperation extends ChangeNotifier {
     } catch (e) {
       ispageloading = false;
     }
-    
+
     ispageloading = false;
     notifyListeners();
   }
+
   String? treatment;
   Treatment? seltreatment;
-  List<Treatment> seltreatmentslist=[];
-  selecttreatment(String? value) async{
+  List<Treatment> seltreatmentslist = [];
+  selecttreatment(String? value) async {
     treatment = value;
     for (var i = 0; i < treatmentlist.length; i++) {
-      if (treatment==treatmentlist[i].name) {
+      if (treatment == treatmentlist[i].name) {
         seltreatment = treatmentlist[i];
       }
     }
     notifyListeners();
   }
 
-  calgendercount({bool ismale=true,isadd = true}) {
-    if (seltreatment!=null) {
+  //  add or substrat gender
+  calgendercount({bool ismale = true, isadd = true}) {
+    if (seltreatment != null) {
       if (ismale) {
         if (isadd) {
-          seltreatment?.male = (seltreatment?.male??0)+1;
+          seltreatment?.male = (seltreatment?.male ?? 0) + 1;
         } else {
-          seltreatment?.male = (seltreatment?.male??0)-1;
+          seltreatment?.male = (seltreatment?.male ?? 0) - 1;
         }
-       }else{
-        if (isadd) {
-          seltreatment?.female = (seltreatment?.female??0)+1;
-        } else {
-          seltreatment?.female = (seltreatment?.female??0)-1;
-        }
-       }
-    }
-    notifyListeners();
-    
-  }
-
-  addtreatments(context,{bool isremve=false,Treatment? removetreat}) async{
-   
-   if (isremve && removetreat!=null) {
-      seltreatmentslist.remove(removetreat);
-       seltreatment = null;
-    treatment=null;
-      
-   }else{
-    if (seltreatment!=null) {
-      if (seltreatmentslist.contains(seltreatment)) {
-        seltreatmentslist.remove(seltreatment!);
-        seltreatmentslist.add(seltreatment!);
       } else {
-        seltreatmentslist.add(seltreatment!);
+        if (isadd) {
+          seltreatment?.female = (seltreatment?.female ?? 0) + 1;
+        } else {
+          seltreatment?.female = (seltreatment?.female ?? 0) - 1;
+        }
       }
-      seltreatment = null;
-     
-    treatment=null;
-    Screen.close(context);
-    }else{
-      snackBar(context, message: 'Treatment not selected');
     }
-   }
-    
-    
     notifyListeners();
   }
 
+  // add treatment from patient creation
+
+  addtreatments(context, {bool isremve = false, Treatment? removetreat}) async {
+    if (isremve && removetreat != null) {
+      seltreatmentslist.remove(removetreat);
+      seltreatment = null;
+      treatment = null;
+    } else {
+      if (seltreatment != null) {
+        if (seltreatmentslist.contains(seltreatment)) {
+          seltreatmentslist.remove(seltreatment!);
+          seltreatmentslist.add(seltreatment!);
+        } else {
+          seltreatmentslist.add(seltreatment!);
+        }
+        seltreatment = null;
+
+        treatment = null;
+        Screen.close(context);
+      } else {
+        snackBar(context, message: 'Treatment not selected');
+      }
+    }
+
+    notifyListeners();
+  }
+
+  // patient Creation method
+  patientcreation(context,PatientPost body) async{
+    isbtnloading = true;
+    ntop.patientcreation(context, body);
+    isbtnloading = false;
+    notifyListeners();
+  }
 }
