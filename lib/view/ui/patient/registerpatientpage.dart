@@ -9,6 +9,7 @@ import 'package:ayushman_bhava/utils/helper/help_datepicker.dart';
 import 'package:ayushman_bhava/utils/helper/help_loader.dart';
 import 'package:ayushman_bhava/utils/helper/help_toast.dart';
 import 'package:ayushman_bhava/utils/helper/helper_screensize.dart';
+import 'package:ayushman_bhava/utils/helper/hemper_pdfmaker.dart';
 import 'package:ayushman_bhava/utils/helper/pagenavigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -304,30 +305,30 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                     ),
                     gap20,
                     AppButton(onPressed: () async{
-                      if (nameCtrl.text.isEmpty) {
-                        snackBar(context, message: 'Patient Name is required');
-                        return;
-                      }
-                      if (whatsCtrl.text.isEmpty) {
-                        snackBar(context, message: 'Whatsapp Number is required');
-                        return;
-                      }
-                      if (addCtrl.text.isEmpty) {
-                        snackBar(context, message: 'Address is required');
-                        return;
-                      }
-                      if (selbranch==null) {
-                        snackBar(context, message: 'Branch is required');
-                        return;
-                      }
-                      if (service.seltreatmentslist.isEmpty) {
-                        snackBar(context, message: 'Treatment is required');
-                        return;
-                      }
-                      if (service.seltreatmentslist.isEmpty) {
-                        snackBar(context, message: 'Treatment is required');
-                        return;
-                      }
+                      // if (nameCtrl.text.isEmpty) {
+                      //   snackBar(context, message: 'Patient Name is required');
+                      //   return;
+                      // }
+                      // if (whatsCtrl.text.isEmpty) {
+                      //   snackBar(context, message: 'Whatsapp Number is required');
+                      //   return;
+                      // }
+                      // if (addCtrl.text.isEmpty) {
+                      //   snackBar(context, message: 'Address is required');
+                      //   return;
+                      // }
+                      // if (selbranch==null) {
+                      //   snackBar(context, message: 'Branch is required');
+                      //   return;
+                      // }
+                      // if (service.seltreatmentslist.isEmpty) {
+                      //   snackBar(context, message: 'Treatment is required');
+                      //   return;
+                      // }
+                      // if (service.seltreatmentslist.isEmpty) {
+                      //   snackBar(context, message: 'Treatment is required');
+                      //   return;
+                      // }
                       double payamt =0.0;
                       for (var i = 0; i < service.treatmentlist.length; i++) {
                         payamt += double.parse(service.treatmentlist[i].price==null&& service.treatmentlist[i].price==''?'0.0':service.treatmentlist[i].price.toString());
@@ -348,8 +349,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       body.female = [100,];
                       body.branch = selbranch;
                       body.treatments = [100,];
-                     await service.patientcreation(context, body);
-                      
+                    //  await service.patientcreation(context, body);
+                      generatePdf(context,body,service.seltreatmentslist);
                     },child: AppText(text: 'Save',color: ColorResources.WHITE,size: 17,letterspace: 0.1,weight: FontWeight.w600,),)
                 ],
               ),
