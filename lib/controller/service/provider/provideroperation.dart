@@ -7,6 +7,7 @@ import 'package:ayushman_bhava/view/ui/home/homepage.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/patientlistmodel.dart';
+import '../../../model/treatmentlistmodel.dart';
 import '../../../utils/helper/help_toast.dart';
 import '../../../utils/string.dart';
 import '../../shared_pref.dart';
@@ -54,4 +55,91 @@ class ProviderOperation extends ChangeNotifier {
     ispageloading = false;
     notifyListeners();
   }
+  //  get branch list method
+  List<Branch> branchlist = [];
+  getbranchlist(context) async {
+    ispageloading = true;
+    try {
+      branchlist = await ntop.getbranchlist(context);
+    } catch (e) {
+      ispageloading = false;
+    }
+    
+    ispageloading = false;
+    notifyListeners();
+  }
+  //  get patients list method
+  List<Treatment> treatmentlist= [];
+  gettreatmentlist(context) async {
+    ispageloading = true;
+    try {
+      treatmentlist = await ntop.gettreatmentlist(context);
+    } catch (e) {
+      ispageloading = false;
+    }
+    
+    ispageloading = false;
+    notifyListeners();
+  }
+  String? treatment;
+  Treatment? seltreatment;
+  List<Treatment> seltreatmentslist=[];
+  selecttreatment(String? value) async{
+    treatment = value;
+    for (var i = 0; i < treatmentlist.length; i++) {
+      if (treatment==treatmentlist[i].name) {
+        seltreatment = treatmentlist[i];
+      }
+    }
+    notifyListeners();
+  }
+
+  calgendercount({bool ismale=true,isadd = true}) {
+    if (seltreatment!=null) {
+      if (ismale) {
+        if (isadd) {
+          seltreatment?.male = (seltreatment?.male??0)+1;
+        } else {
+          seltreatment?.male = (seltreatment?.male??0)-1;
+        }
+       }else{
+        if (isadd) {
+          seltreatment?.female = (seltreatment?.female??0)+1;
+        } else {
+          seltreatment?.female = (seltreatment?.female??0)-1;
+        }
+       }
+    }
+    notifyListeners();
+    
+  }
+
+  addtreatments(context,{bool isremve=false,Treatment? removetreat}) async{
+   
+   if (isremve && removetreat!=null) {
+      seltreatmentslist.remove(removetreat);
+       seltreatment = null;
+    treatment=null;
+      
+   }else{
+    if (seltreatment!=null) {
+      if (seltreatmentslist.contains(seltreatment)) {
+        seltreatmentslist.remove(seltreatment!);
+        seltreatmentslist.add(seltreatment!);
+      } else {
+        seltreatmentslist.add(seltreatment!);
+      }
+      seltreatment = null;
+     
+    treatment=null;
+    Screen.close(context);
+    }else{
+      snackBar(context, message: 'Treatment not selected');
+    }
+   }
+    
+    
+    notifyListeners();
+  }
+
 }

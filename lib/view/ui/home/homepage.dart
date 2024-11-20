@@ -4,16 +4,18 @@ import 'package:ayushman_bhava/utils/dimensions.dart';
 import 'package:ayushman_bhava/utils/extensions/space_ext.dart';
 import 'package:ayushman_bhava/utils/helper/help_loader.dart';
 import 'package:ayushman_bhava/utils/helper/helper_screensize.dart';
+import 'package:ayushman_bhava/utils/helper/pagenavigator.dart';
+import 'package:ayushman_bhava/view/ui/patient/registerpatientpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../controller/service/provider/provideroperation.dart';
 import '../../components/appbutton.dart';
 import '../../components/apptext.dart';
 import '../../components/apptextfeild.dart';
+import 'widget/patientcard.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -131,108 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: liveservice.patient.length,
           itemBuilder: (context, index) {
             Patient data = liveservice.patient[index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: padding20,vertical: padding),
-            child: Container(
-                  decoration: BoxDecoration(
-                      color: ColorResources.CONTAINERGREYCOLOR,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            AppText(
-                              text: "${data.id ?? ''}. ",
-                              color: ColorResources.BLACK,
-                              weight: FontWeight.w500,
-                              size: 18,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: AppText(
-                                  text: data.name ?? '',
-                                  color: ColorResources.BLACK,
-                                  weight: FontWeight.w500,
-                                  size: 18,
-                                  family: 'Poppins'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 45.0, bottom: 10,right: padding),
-                        child: Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                          
-                            children: [
-                              AppText(
-                                text: data.patientdetailsSet!.isNotEmpty?data.patientdetailsSet?.first.treatmentName??'':"",
-                                color: ColorResources.TEXTGREEN,
-                                size: 16,
-                                weight: FontWeight.w300,
-                                maxline: 1,
-                              ),
-                              10.hBox,
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                      'assets/images/uil_calender.svg'),
-                                  3.wBox,
-                                  Expanded(
-                                    child: AppText(
-                                        text: DateFormat("yyyy-mm-dd").format(DateTime.parse(data.createdAt??DateTime.now().toString())),
-                                        color: ColorResources.BLACK.withOpacity(0.5),
-                                        size: 12,
-                                        weight: FontWeight.w400,
-                                        family: 'Poppins'),
-                                  ),
-                                  20.wBox,
-                                  SvgPicture.asset('assets/images/person.svg'),
-                                  3.wBox,
-                                  Expanded(
-                                    child: AppText(
-                                        text: data.user ?? '',
-                                        color: ColorResources.BLACK.withOpacity(0.5),
-                                        size: 12,
-                                        weight: FontWeight.w400,
-                                        family: 'Poppins'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Divider(
-                        height: 1,
-                        color: ColorResources.BLACK.withOpacity(0.2),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            AppText(
-                                text: 'View Booking details',
-                                color: ColorResources.BLACK,
-                                size: 16,
-                                weight: FontWeight.w300,
-                                family: 'Poppins'),
-                            const Icon(
-                              Icons.arrow_forward_ios_rounded,
-                              size: 20,
-                              color: ColorResources.TEXTGREEN,
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-          );
+          return PatientCard(data: data);
         },),
       ),
       bottomNavigationBar: SizedBox(
@@ -241,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: AppButton(
                 onPressed: () {
-                
+                Screen.open(context, const PatientRegistrationScreen());
                 },
                 child: AppText(
                     text: 'Register Now',
@@ -255,3 +156,4 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+

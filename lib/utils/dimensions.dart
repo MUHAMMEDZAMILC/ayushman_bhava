@@ -17,6 +17,7 @@ const gapLarge18 = SizedBox(height: 18);
 const gapSmall = SizedBox(height: paddingSmall);
 const gap13 = SizedBox(height: 13);
 const gap11 = SizedBox(height: 11);
+const gap20 = SizedBox(height: 20);
 const gap21 = SizedBox(height: 21);
 const gap26 = SizedBox(height: 26);
 

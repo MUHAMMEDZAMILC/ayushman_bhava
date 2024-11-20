@@ -5,8 +5,10 @@ import 'dart:io';
 import 'package:ayushman_bhava/utils/globalvariable.dart';
 import 'package:ayushman_bhava/utils/helper/help_toast.dart';
 
+import '../../../model/branchlistmodel.dart';
 import '../../../model/logindatamodel.dart';
 import '../../../model/patientlistmodel.dart';
+import '../../../model/treatmentlistmodel.dart';
 import '../../api/urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,6 +53,54 @@ class ProviderApiService {
     log(response.body);
     if (response.statusCode == 200) {
       return PatientList.fromJson(json.decode(response.body)).patient;
+    } else {
+      return empty;
+    }
+    } on SocketException {
+      snackBar(context, message: 'NetWork Down');
+      return empty;
+    } catch (e) {
+      snackBar(context, message: 'Login Failed');
+      return empty;
+    }
+  }
+  // getpatientlist api service
+  getbranchlist(context) async{
+    List<Branch> empty=[];
+    var url = '$baseUrl$branchListUrl';
+    log(url);
+    try {
+    final response =
+        await http.get(Uri.parse(url), headers: {
+      'Authorization': 'Bearer $logintoken',
+    });
+    log(response.body);
+    if (response.statusCode == 200) {
+      return BranchList.fromJson(json.decode(response.body)).branches;
+    } else {
+      return empty;
+    }
+    } on SocketException {
+      snackBar(context, message: 'NetWork Down');
+      return empty;
+    } catch (e) {
+      snackBar(context, message: 'Login Failed');
+      return empty;
+    }
+  }
+  // getpatientlist api service
+  gettreatmentlist(context) async{
+    List<Treatment> empty=[];
+    var url = '$baseUrl$treatmentListUrl';
+    log(url);
+    try {
+    final response =
+        await http.get(Uri.parse(url), headers: {
+      'Authorization': 'Bearer $logintoken',
+    });
+    log(response.body);
+    if (response.statusCode == 200) {
+      return TreatmentList.fromJson(json.decode(response.body)).treatments;
     } else {
       return empty;
     }
