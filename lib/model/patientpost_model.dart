@@ -16,16 +16,16 @@ class PatientPost {
     String? payment;
     String? phone;
     String? address;
-    double? totalAmount;
-    double? discountAmount;
-    double? advanceAmount;
-    double? balanceAmount;
+    String? totalAmount;
+    String? discountAmount;
+    String? advanceAmount;
+    String? balanceAmount;
     String? dateNdTime;
     String? id;
-    List<int>? male=[];
-    List<int>? female=[];
+    String? male;
+    String? female;
     Branch? branch;
-    List<int>? treatments=[];
+    String? treatments;
 
     PatientPost({
         this.name,
@@ -73,7 +73,26 @@ class PatientPost {
         "id": id,
         "male": male,
         "female": female,
-        "branch": branch,
+        "branch": branch?.id.toString(),
         "treatments": treatments,
     };
+    final map = <String, dynamic>{};
+    tomap() {
+       map["name"]= name;
+        map["excecutive"]= excecutive;
+        map["payment"]= payment;
+        map["phone"]= phone;
+        map["address"]= address;
+        map["total_amount"]= totalAmount;
+        map["discount_amount"]= discountAmount;
+        map["advance_amount"]= advanceAmount;
+        map["balance_amount"]= balanceAmount;
+        map["date_nd_time"]= dateNdTime;
+        map["id"]= id;
+        map["male"]= male;
+        map["female"]= female;
+        map["branch"]= branch?.id.toString();
+        map["treatments"]= treatments;
+        return map;
+    }
 }

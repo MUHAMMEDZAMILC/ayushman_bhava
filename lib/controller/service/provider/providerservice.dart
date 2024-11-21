@@ -120,19 +120,26 @@ class ProviderApiService {
     log(url);
     dynamic bodyenc = jsonEncode(body.toJson());
     log(bodyenc);
+    
     try {
         final Uri uri = Uri.parse(url);
 
     var response = await http.post(uri, headers:  {
       'Authorization': 'Bearer $logintoken',
-      'Content-Type': 'application/json', 'Accept': '*/*'
-    },body: bodyenc);
+    },body: body.toJson());
     log(response.body);
     if (response.statusCode == 200) {
         log("me s s a g e");
-        return {"Result":true};
+        if (jsonDecode(response.body)['status']==true) {
+          snackBar(context, message: jsonDecode(response.body)['message'].toString(),type: MessageType.success);
+          return {"Result":true};
+        }else{
+          snackBar(context, message: jsonDecode(response.body)['message'].toString());
+          return {"Result":false};
+        }
       
     } else {
+      log(response.body.toString());
       snackBar(context, message: "Registration Failed");
       return {"Result":false};
     }
@@ -140,6 +147,7 @@ class ProviderApiService {
       snackBar(context, message: 'NetWork Down');
        return {"Result":false};
     } catch (e) {
+      log(e.toString());
       snackBar(context, message:"Registration Failed");
       return {"Result":false};
     }

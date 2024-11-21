@@ -50,7 +50,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
       treathourCtrl = TextEditingController(),
       treatminuteCtrl = TextEditingController(),
       balanCtrl = TextEditingController();
-  String? branch,location;
+  String? branch,location,payment='Cash';
   Branch? selbranch;
 
   @override
@@ -71,6 +71,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   Widget build(BuildContext context) {
     final service = Provider.of<ProviderOperation>(context, listen: false);
     final liveservice = Provider.of<ProviderOperation>(context, listen: true);
+    // liveservice.isbtnloading=false;
     ScreenUtil.init(context);
     return ispageloading
         ? const PageEntryLoader()
@@ -343,6 +344,36 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         onchange: (p0) => calculation(),
                       ),
                       gap20,
+                      Row(
+                        children: [
+                        Radio(
+                          focusColor: ColorResources.BLACK.withOpacity(0.25),
+                          value: 'Cash', groupValue: payment, onChanged: (value) {
+                          payment=value;
+                          setState(() {
+                            
+                          });
+
+                        },),
+                        AppText(text: 'Cash',size: 14,weight: FontWeight.w400,),
+                        const Spacer(),
+                        Radio(value: 'Card', groupValue: payment, onChanged: (value) {
+                          payment=value;
+                          setState(() {
+                            
+                          });
+
+                        },),
+                        AppText(text: 'Card',size: 14,weight: FontWeight.w400,),
+                        const Spacer(),
+                        Radio(value: 'Upi', groupValue: payment, onChanged: (value) {
+                          payment=value;
+                          setState(() {
+                            
+                          });
+
+                        },),AppText(text: 'UPI',size: 14,weight: FontWeight.w400,)
+                      ],),20.hBox,
                       AppTextFeild(
                           type: TextInputType.number,
                           label: "Advance Amount ",
@@ -436,27 +467,25 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
     PatientPost body = PatientPost();
     body.name = nameCtrl.text;
-    body.excecutive = '';
-    body.payment = double.parse(
-            totalCtrl.text.trim() == '' ? '0.0' : totalCtrl.text.trim())
-        .toString();
+    body.excecutive = 'ex';
+    body.payment =payment;
     body.phone = whatsCtrl.text;
     body.address = '${addCtrl.text} $location';
     body.totalAmount = double.parse(
-        totalCtrl.text.trim() == '' ? '0.0' : totalCtrl.text.trim());
+        totalCtrl.text.trim() == '' ? '0.0' : totalCtrl.text.trim()).toInt().toString();
     body.discountAmount =
-        double.parse(discCtrl.text.trim() == '' ? '0.0' : discCtrl.text.trim());
+        double.parse(discCtrl.text.trim() == '' ? '0.0' : discCtrl.text.trim()).toInt().toString();
     body.advanceAmount = double.parse(
-        advanCtrl.text.trim() == '' ? '0.0' : advanCtrl.text.trim());
+        advanCtrl.text.trim() == '' ? '0.0' : advanCtrl.text.trim()).toInt().toString();
     body.balanceAmount = double.parse(
-        balanCtrl.text.trim() == '' ? '0.0' : balanCtrl.text.trim());
+        balanCtrl.text.trim() == '' ? '0.0' : balanCtrl.text.trim()).toInt().toString();
     body.dateNdTime =
-        '${treatdateCtrl.text}-${treathourCtrl.text}:${treatminuteCtrl.text}';
+        '${treatdateCtrl.text}-${treathourCtrl.text}:${treatminuteCtrl.text} AM';
     body.id = '';
-    body.male = liveservice.seltreatmentslist.map((e) => e.id!,).toList();
-    body.female = liveservice.seltreatmentslist.map((e) => e.id!,).toList();;
+    body.male = liveservice.malecount.toString();
+    body.female = liveservice.femalecount.toString();
     body.branch = selbranch;
-    body.treatments = liveservice.seltreatmentslist.map((e) => e.id!,).toList();
+    body.treatments = liveservice.seltreatmentslist.map((e) => e.id!,).toList().join(',');
     await service.patientcreation(context, body);
     if (liveservice.issuccess) {
       Screen.close(context);

@@ -87,6 +87,7 @@ class ProviderOperation extends ChangeNotifier {
 
   String? treatment;
   Treatment? seltreatment;
+  int malecount=0, femalecount=0;
   List<Treatment> seltreatmentslist = [];
   selecttreatment(String? value) async {
     treatment = value;
@@ -100,6 +101,9 @@ class ProviderOperation extends ChangeNotifier {
 
   //  add or substrat gender
   calgendercount({bool ismale = true, isadd = true}) {
+     totoalpaymentamt = 0.0;
+     femalecount=0;
+     malecount=0;
     if (seltreatment != null) {
       if (ismale) {
         if (isadd) {
@@ -115,6 +119,12 @@ class ProviderOperation extends ChangeNotifier {
         }
       }
     }
+    for (var i = 0; i < seltreatmentslist.length; i++) {
+      seltreatmentslist[i].totalamt = (double.parse(seltreatmentslist[i].price??'0.0')*(seltreatmentslist[i].male??0 + seltreatmentslist[i].female!));
+      totoalpaymentamt+=seltreatmentslist[i].totalamt??0;
+      malecount +=seltreatmentslist[i].male??0;
+      femalecount +=seltreatmentslist[i].female??0;
+    }
     notifyListeners();
   }
 
@@ -122,6 +132,8 @@ class ProviderOperation extends ChangeNotifier {
   double totoalpaymentamt = 0.0;
   addtreatments(context, {bool isremve = false, Treatment? removetreat}) async {
      totoalpaymentamt = 0.0;
+     femalecount=0;
+     malecount=0;
     if (isremve && removetreat != null) {
       seltreatmentslist.remove(removetreat);
       seltreatment = null;
@@ -145,6 +157,8 @@ class ProviderOperation extends ChangeNotifier {
     for (var i = 0; i < seltreatmentslist.length; i++) {
       seltreatmentslist[i].totalamt = (double.parse(seltreatmentslist[i].price??'0.0')*(seltreatmentslist[i].male??0 + seltreatmentslist[i].female!));
       totoalpaymentamt+=seltreatmentslist[i].totalamt??0;
+      malecount +=seltreatmentslist[i].male??0;
+      femalecount +=seltreatmentslist[i].female??0;
     }
 
     notifyListeners();
