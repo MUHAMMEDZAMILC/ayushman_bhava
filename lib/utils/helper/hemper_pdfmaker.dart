@@ -2,15 +2,10 @@
 
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:ayushman_bhava/model/logindatamodel.dart';
 import 'package:ayushman_bhava/model/patientpost_model.dart';
 import 'package:ayushman_bhava/model/treatmentlistmodel.dart';
-import 'package:ayushman_bhava/utils/string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image/src/image/image.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
@@ -26,7 +21,10 @@ Future<File> generatePdf(BuildContext context,PatientPost data,List<Treatment> t
 
   const textgreen = PdfColor.fromInt(0xFF00A64F);
   const textgreylight = PdfColor.fromInt(0xFF9A9A9A);
+   final fontData = await rootBundle.load('assets/fonts/Manrope-Regular.ttf');
+  final ttf = pw.Font.ttf(fontData);
   final pdf = pw.Document();
+
 final backgroundImage = pw.MemoryImage(
     (await rootBundle.load('assets/images/logotran.png')).buffer.asUint8List(),
   );
@@ -40,7 +38,7 @@ final backgroundImage = pw.MemoryImage(
       pw.Page(
         margin: const pw.EdgeInsets.all(10),
         pageFormat: pagesize,
-        theme: pw.ThemeData(defaultTextStyle: const pw.TextStyle()),
+        theme: pw.ThemeData(defaultTextStyle:  pw.TextStyle(font: ttf)),
         build: (pw.Context contexts) =>pw.Stack(
           children: [
            pw.Center(
@@ -98,7 +96,7 @@ final backgroundImage = pw.MemoryImage(
                           
                         ),
                       ),
-                      pw.Text("${data.branch?.address} ${data.branch?.address} \n email ${data.branch?.mail} \n phone ${data.branch?.phone} \n GST ${data.branch?.gst} ",textAlign: pw.TextAlign.right,style: const pw.TextStyle(color: textgreylight)),
+                      pw.Text("${data.branch?.address??''} ${data.branch?.address??''} \n email ${data.branch?.mail??''} \n phone ${data.branch?.phone??''} \n GST ${data.branch?.gst??''} ",textAlign: pw.TextAlign.right,style: const pw.TextStyle(color: textgreylight)),
                     ],
                   ),
                   )
@@ -174,7 +172,7 @@ final backgroundImage = pw.MemoryImage(
                       pw.Row(
                         children: [
                           pw.Expanded(child: pw.Text('Treatment Date',style: pw.TextStyle(fontWeight: pw.FontWeight.bold))),
-                          pw.Expanded(child: pw.Text('',style: const pw.TextStyle(color: textgreylight))),
+                          pw.Expanded(child: pw.Text(data.dateNdTime??'',style: const pw.TextStyle(color: textgreylight))),
                         ]
                       ),pw.SizedBox(
                         height: 5
@@ -211,6 +209,9 @@ final backgroundImage = pw.MemoryImage(
                   pw.Expanded(child: pw.Text("Total", style: pw.TextStyle(fontWeight: pw.FontWeight.bold,color: textgreen),textAlign: pw.TextAlign.right), ),
                 ]
               ),
+              pw.SizedBox(
+                height: 5
+              ),
               ...treatmentlist.map((treatment) {
                 return  pw.Column(
                   children: [
@@ -219,10 +220,10 @@ final backgroundImage = pw.MemoryImage(
                   pw.Expanded(
                     flex: 2,
                     child: pw.Text(treatment.name??'', style: const pw.TextStyle(),textAlign: pw.TextAlign.left), ),
-                  pw.Expanded(child: pw.Text('${treatment.price}', style: const pw.TextStyle(),textAlign: pw.TextAlign.left), ),
+                  pw.Expanded(child: pw.Text("\u{20B9} ${treatment.price}", style: const pw.TextStyle(),textAlign: pw.TextAlign.left), ),
                   pw.Expanded(child: pw.Text("${treatment.male}", style: const pw.TextStyle(),textAlign: pw.TextAlign.center), ),
                   pw.Expanded(child: pw.Text("${treatment.female}", style: const pw.TextStyle(),textAlign: pw.TextAlign.center), ),
-                  pw.Expanded(child: pw.Text("${treatment.price}", style: const pw.TextStyle(),textAlign: pw.TextAlign.right), ),
+                  pw.Expanded(child: pw.Text(" \u{20B9} ${treatment.totalamt}", style: const pw.TextStyle(),textAlign: pw.TextAlign.right), ),
                 ]
               ),
                pw.SizedBox(height: 3),
@@ -245,7 +246,7 @@ final backgroundImage = pw.MemoryImage(
                       pw.Row(
                         children: [
                           pw.Expanded(child: pw.Text('Total Amount',style: pw.TextStyle(fontWeight: pw.FontWeight.bold),textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text(data.payment??'',style:  pw.TextStyle(fontWeight: pw.FontWeight.bold),textAlign: pw.TextAlign.right)),
+                          pw.Expanded(child: pw.Text('\u{20B9} ${data.totalAmount.toString()}',style:  pw.TextStyle(fontWeight: pw.FontWeight.bold),textAlign: pw.TextAlign.right)),
                         ]
                       ),
                       pw.SizedBox(
@@ -254,7 +255,7 @@ final backgroundImage = pw.MemoryImage(
                       pw.Row(
                         children: [
                           pw.Expanded(child: pw.Text('Dscount',style: const pw.TextStyle(),textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text(data.discountAmount.toString(),style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
+                          pw.Expanded(child: pw.Text('\u{20B9} ${data.discountAmount.toString()}',style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
                        ]
                       ),pw.SizedBox(
                         height: 5
@@ -262,14 +263,14 @@ final backgroundImage = pw.MemoryImage(
                       pw.Row(
                         children: [
                             pw.Expanded(child: pw.Text('Advance',style: const pw.TextStyle(),textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text(data.advanceAmount.toString(),style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
+                          pw.Expanded(child: pw.Text('\u{20B9} ${data.advanceAmount.toString()}',style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
                         ]
                       ),
                       pw.Divider(color: textgreylight,borderStyle: pw.BorderStyle.dashed),
                       pw.Row(
                         children: [
                             pw.Expanded(child: pw.Text('Balance',style: const pw.TextStyle(),textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text(data.balanceAmount.toString(),style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
+                          pw.Expanded(child: pw.Text('\u{20B9} ${data.balanceAmount.toString()}',style:  const pw.TextStyle(),textAlign: pw.TextAlign.right)),
                         ]
                       ),
                     ],

@@ -119,8 +119,9 @@ class ProviderOperation extends ChangeNotifier {
   }
 
   // add treatment from patient creation
-
+  double totoalpaymentamt = 0.0;
   addtreatments(context, {bool isremve = false, Treatment? removetreat}) async {
+     totoalpaymentamt = 0.0;
     if (isremve && removetreat != null) {
       seltreatmentslist.remove(removetreat);
       seltreatment = null;
@@ -141,14 +142,22 @@ class ProviderOperation extends ChangeNotifier {
         snackBar(context, message: 'Treatment not selected');
       }
     }
+    for (var i = 0; i < seltreatmentslist.length; i++) {
+      seltreatmentslist[i].totalamt = (double.parse(seltreatmentslist[i].price??'0.0')*(seltreatmentslist[i].male??0 + seltreatmentslist[i].female!));
+      totoalpaymentamt+=seltreatmentslist[i].totalamt??0;
+    }
 
     notifyListeners();
   }
 
   // patient Creation method
+  bool issuccess =false;
   patientcreation(context,PatientPost body) async{
+    issuccess =false;
     isbtnloading = true;
-    ntop.patientcreation(context, body);
+    notifyListeners();
+   var res =  await ntop.patientcreation(context, body);
+   issuccess = res['Result'];
     isbtnloading = false;
     notifyListeners();
   }

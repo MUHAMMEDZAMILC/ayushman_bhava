@@ -16,7 +16,7 @@ class AppTextFeild extends StatelessWidget {
       this.width,
       this.prefix,
       this.suffix,
-      this.readonly,this.ontap});
+      this.readonly,this.ontap,this.onchange});
   TextEditingController controller;
   String? label, hinttext;
   TextInputType? type;
@@ -24,6 +24,7 @@ class AppTextFeild extends StatelessWidget {
   Widget? suffix, prefix;
   double? height, width;
   Function()? ontap;
+  Function(String)? onchange;
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
@@ -50,6 +51,7 @@ class AppTextFeild extends StatelessWidget {
             height: 50,
             child: TextFormField(
               onTap: ontap,
+              onChanged: onchange,
               obscureText: isobsecure ?? false,
               controller: controller,
               keyboardType: type ?? TextInputType.text,

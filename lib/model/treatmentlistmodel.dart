@@ -47,6 +47,7 @@ class Treatment {
     DateTime? updatedAt;
     int? male;
     int? female;
+    double? totalamt;
 
     Treatment({
         this.id,
@@ -59,6 +60,7 @@ class Treatment {
         this.updatedAt,
         this.male=0,
         this.female=0,
+        this.totalamt=0
     });
 
     factory Treatment.fromJson(Map<String, dynamic> json) => Treatment(

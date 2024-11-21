@@ -120,7 +120,8 @@ class ProviderApiService {
     log(url);
     dynamic bodyenc = jsonEncode(body.toJson());
     log(bodyenc);
-     final Uri uri = Uri.parse(url);
+    try {
+        final Uri uri = Uri.parse(url);
 
     var response = await http.post(uri, headers:  {
       'Authorization': 'Bearer $logintoken',
@@ -128,16 +129,20 @@ class ProviderApiService {
     },body: bodyenc);
     log(response.body);
     if (response.statusCode == 200) {
-      try {
         log("me s s a g e");
-        return jsonDecode(response.body);
-      } catch (e) {
-        log("error === $e");
-        
-      }
+        return {"Result":true};
+      
     } else {
-      snackBar(context, message: "invalid");
-      return {"Result":false,"ID":0};
+      snackBar(context, message: "Registration Failed");
+      return {"Result":false};
     }
+    } on SocketException {
+      snackBar(context, message: 'NetWork Down');
+       return {"Result":false};
+    } catch (e) {
+      snackBar(context, message:"Registration Failed");
+      return {"Result":false};
+    }
+   
   }
 }
