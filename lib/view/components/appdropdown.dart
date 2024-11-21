@@ -55,6 +55,7 @@ class MyAppDropDown extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4.0),
                       child: DropdownButton(
+                        dropdownColor: ColorResources.WHITE,
                         icon: const Icon(Icons.keyboard_arrow_down_outlined,color: ColorResources.TEXTGREEN,),
                         isDense: true,
                         isExpanded: true,

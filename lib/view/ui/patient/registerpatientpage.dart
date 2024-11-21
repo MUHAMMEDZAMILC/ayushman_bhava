@@ -38,7 +38,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   TextEditingController nameCtrl = TextEditingController(),
       whatsCtrl = TextEditingController(),
       addCtrl = TextEditingController(),
-      locaCtrl = TextEditingController(),
       branchCtrl = TextEditingController(),
       totalCtrl = TextEditingController(),
       discCtrl = TextEditingController(),
@@ -51,7 +50,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
       treathourCtrl = TextEditingController(),
       treatminuteCtrl = TextEditingController(),
       balanCtrl = TextEditingController();
-  String? branch;
+  String? branch,location;
   Branch? selbranch;
 
   @override
@@ -111,10 +110,20 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           hinttext: "Enter your full address",
                           controller: addCtrl),
                       gap20,
-                      AppTextFeild(
-                          label: "Location",
-                          hinttext: "Enter Full Name",
-                          controller: locaCtrl),
+                      MyAppDropDown(
+                        value: location,
+                        items: const [
+                          'Mankavu','Nadakkavu','Beach',
+                        ],
+                        onChange: (value) {
+                          location = value ?? '';
+                        
+                          setState(() {});
+                        },
+                        label: "Location",
+                        hint: "Select Location",
+                      ),
+                     
                       gap20,
                       MyAppDropDown(
                         value: branch,
@@ -417,7 +426,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
             totalCtrl.text.trim() == '' ? '0.0' : totalCtrl.text.trim())
         .toString();
     body.phone = whatsCtrl.text;
-    body.address = addCtrl.text;
+    body.address = '${addCtrl.text} $location';
     body.totalAmount = double.parse(
         totalCtrl.text.trim() == '' ? '0.0' : totalCtrl.text.trim());
     body.discountAmount =
@@ -429,16 +438,10 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     body.dateNdTime =
         '${treatdateCtrl.text}-${treathourCtrl.text}:${treatminuteCtrl.text}';
     body.id = '';
-    body.male = [
-      100,
-    ];
-    body.female = [
-      100,
-    ];
+    body.male = liveservice.seltreatmentslist.map((e) => e.id!,).toList();
+    body.female = liveservice.seltreatmentslist.map((e) => e.id!,).toList();;
     body.branch = selbranch;
-    body.treatments = [
-      100,
-    ];
+    body.treatments = liveservice.seltreatmentslist.map((e) => e.id!,).toList();
     await service.patientcreation(context, body);
     if (liveservice.issuccess) {
       Screen.close(context);
@@ -447,28 +450,23 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
       showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (builder) => WillPopScope(
-                onWillPop: () async {
-                  return false;
+          builder: (builder) => AlertDialog(
+            title: AppText(
+              text: 'Registration is Failed',
+              size: 18,
+              weight: FontWeight.w500,
+              letterspace: 0.6,
+            ),
+            actions: [
+              CupertinoButton(
+                child: AppText(text: 'Pdf generate'),
+                onPressed: () {
+                  Screen.close(context);
+                  generatePdf(context, body, service.seltreatmentslist);
                 },
-                child: AlertDialog(
-                  title: AppText(
-                    text: 'Registration is Failed',
-                    size: 18,
-                    weight: FontWeight.w500,
-                    letterspace: 0.6,
-                  ),
-                  actions: [
-                    CupertinoButton(
-                      child: AppText(text: 'Pdf generate'),
-                      onPressed: () {
-                        Screen.close(context);
-                        generatePdf(context, body, service.seltreatmentslist);
-                      },
-                    )
-                  ],
-                ),
-              ));
+              )
+            ],
+          ));
     }
                         },
                         child: AppText(

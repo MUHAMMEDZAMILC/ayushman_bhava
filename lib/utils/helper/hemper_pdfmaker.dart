@@ -336,7 +336,7 @@ final backgroundImage = pw.MemoryImage(
   //     path.join(path.current, '/storage/emulated/0/Download');
 
   log('2');
-  String fileName = "Patient1.pdf";
+  String fileName = "Patient_${data.name}.pdf";
 
   log('3');
   // Save the PDF to a file
