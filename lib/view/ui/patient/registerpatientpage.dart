@@ -84,6 +84,21 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                   ),
                 )
               ],
+           bottom:    PreferredSize(
+            preferredSize: Size(ScreenUtil.screenWidth!*1, 50),
+            child: Container(
+              width: ScreenUtil.screenWidth,
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(
+                  color: ColorResources.BLACK.withOpacity(0.2)
+                ))
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(padding20),
+                child: AppText(text: 'Register',size:24,weight:FontWeight.w600 ,color: ColorResources.LOGINHEAD,),
+              ),
+            ),
+          ),
             ),
             body: SizedBox(
               width: ScreenUtil.screenWidth,
