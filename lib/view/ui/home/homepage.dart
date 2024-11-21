@@ -5,6 +5,7 @@ import 'package:ayushman_bhava/utils/extensions/space_ext.dart';
 import 'package:ayushman_bhava/utils/helper/help_loader.dart';
 import 'package:ayushman_bhava/utils/helper/helper_screensize.dart';
 import 'package:ayushman_bhava/utils/helper/pagenavigator.dart';
+import 'package:ayushman_bhava/utils/string.dart';
 import 'package:ayushman_bhava/view/ui/patient/registerpatientpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Screen.open(context, const PatientRegistrationScreen());
                 },
                 child: AppText(
-                    text: 'Register Now',
+                    text: registernow,
                     color: ColorResources.WHITE,
                     size: 17,
                     letterspace: 0.1,

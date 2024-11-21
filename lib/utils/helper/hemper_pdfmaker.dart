@@ -246,7 +246,7 @@ final backgroundImage = pw.MemoryImage(
                       pw.Row(
                         children: [
                           pw.Expanded(child: pw.Text('Total Amount',style: pw.TextStyle(fontWeight: pw.FontWeight.bold),textAlign: pw.TextAlign.right)),
-                          pw.Expanded(child: pw.Text('\u{20B9} ${data.totalAmount.toString()}',style:  pw.TextStyle(fontWeight: pw.FontWeight.bold),textAlign: pw.TextAlign.right)),
+                          pw.Expanded(child: pw.Text('\u{20B9} ${data.totalAmount.toString()}',style:  pw.TextStyle(fontWeight: pw.FontWeight.bold,font: ttf),textAlign: pw.TextAlign.right)),
                         ]
                       ),
                       pw.SizedBox(
